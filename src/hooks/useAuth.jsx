@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { API_BASE } from '../utils/api.js';
 
 const AuthContext = createContext(null);
 
@@ -13,7 +14,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (!token) { setLoading(false); return; }
 
-    fetch('/api/auth/me', {
+    fetch(`${API_BASE}/api/auth/me`, {
       headers: { 'Authorization': `Bearer ${token}` },
     })
       .then(r => r.ok ? r.json() : Promise.reject())
@@ -26,7 +27,7 @@ export function AuthProvider({ children }) {
   }, [token]);
 
   const login = useCallback(async (email, password) => {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -40,7 +41,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const register = useCallback(async (name, email, password) => {
-    const res = await fetch('/api/auth/register', {
+    const res = await fetch(`${API_BASE}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password }),
@@ -60,7 +61,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const updateSettings = useCallback(async (settings) => {
-    const res = await fetch('/api/auth/settings', {
+    const res = await fetch(`${API_BASE}/api/auth/settings`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

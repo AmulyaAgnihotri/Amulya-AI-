@@ -8,6 +8,7 @@ import WelcomeScreen from '../components/WelcomeScreen.jsx';
 import SettingsModal from '../components/SettingsModal.jsx';
 import { useChat } from '../hooks/useChat.js';
 import { parseSSEStream } from '../utils/streamParser.js';
+import { API_BASE } from '../utils/api.js';
 
 export default function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -81,7 +82,7 @@ export default function ChatPage() {
     });
 
     try {
-      const response = await fetch('/api/imagine/stream', {
+      const response = await fetch(`${API_BASE}/api/imagine/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: imaginePrompt }),

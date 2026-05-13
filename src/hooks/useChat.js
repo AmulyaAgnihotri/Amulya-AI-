@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { parseSSEStream } from '../utils/streamParser.js';
+import { API_BASE } from '../utils/api.js';
 
 const STORAGE_KEY = 'amulya-ai-chats';
 
@@ -146,7 +147,7 @@ export function useChat() {
         content: m.content,
       }));
 
-      const response = await fetch('/api/chat', {
+      const response = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, history }),
@@ -288,7 +289,7 @@ export function useChat() {
       formData.append('file', file);
       if (prompt) formData.append('prompt', prompt);
 
-      const response = await fetch('/api/upload', {
+      const response = await fetch(`${API_BASE}/api/upload`, {
         method: 'POST',
         body: formData,
       });

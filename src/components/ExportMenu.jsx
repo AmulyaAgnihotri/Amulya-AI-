@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Share, FileDown, FileText, Github, Loader2 } from 'lucide-react';
 import { exportAsMarkdown, exportAsPDF } from '../utils/exportChat.js';
 import { useAuth } from '../hooks/useAuth.jsx';
+import { API_BASE } from '../utils/api.js';
 
 export default function ExportMenu({ messages, title }) {
   const [open, setOpen] = useState(false);
@@ -22,7 +23,7 @@ export default function ExportMenu({ messages, title }) {
     setGistLoading(true);
     try {
       const content = messages.map(m => `## ${m.role === 'user' ? 'You' : 'AI'}\n\n${m.content}`).join('\n\n---\n\n');
-      const res = await fetch('/api/gist', {
+      const res = await fetch(`${API_BASE}/api/gist`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ filename: `${title || 'chat'}.md`, content, description: `Chat from Amulya AI` }),

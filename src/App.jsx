@@ -8,7 +8,7 @@ import AuthPage from './pages/AuthPage.jsx';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <AnimatePresence mode="wait">
           <Routes>
