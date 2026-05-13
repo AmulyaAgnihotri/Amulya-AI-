@@ -1,27 +1,24 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 
 dotenv.config();
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/amulya-ai';
+const MONGODB_URI = process.env.MONGODB_URI || '';
 
 let isConnected = false;
 
 export async function connectDB() {
   if (isConnected) return;
 
+  // Skip connection if no URI is configured
+  if (!MONGODB_URI || MONGODB_URI.includes('YOUR_PASSWORD') || MONGODB_URI.includes('xxxxx')) {
+    console.log('⚠️  No MongoDB URI configured. Running with localStorage fallback.');
+    console.log('   Set MONGODB_URI in .env to enable database features.');
+    return;
+  }
+
   try {
-    let uriToConnect = MONGODB_URI;
-    
-    // Check if using the default placeholder URI
-    if (uriToConnect.includes('xxxxx.mongodb.net') || uriToConnect.includes('YOUR_PASSWORD')) {
-      console.log('⚠️  Placeholder MongoDB URI detected. Starting local memory server...');
-      const mongoServer = await MongoMemoryServer.create();
-      uriToConnect = mongoServer.getUri();
-    }
-    
-    const conn = await mongoose.connect(uriToConnect);
+    const conn = await mongoose.connect(MONGODB_URI);
     isConnected = true;
     console.log(`✅ MongoDB connected: ${conn.connection.host}`);
   } catch (error) {
